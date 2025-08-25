@@ -23,19 +23,30 @@ jobs:
     - name: Build site
       run: hugo
       
-    - name: Install xmllint
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+        
+    - name: Install validation tools
       run: |
         sudo apt-get update
         sudo apt-get install -y libxml2-utils
+        pip install feedparser
         
-    - name: Validate RSS feeds
+    - name: Validate XML syntax
       run: |
-        echo "Validating RSS feeds..."
+        echo "Validating XML syntax..."
         
         # Find all XML files in public directory
         find public -name "*.xml" -type f | while read -r xml_file; do
-          echo "Checking: $xml_file"
+          echo "Checking XML syntax: $xml_file"
           xmllint --noout "$xml_file" || exit 1
         done
         
-        echo "All RSS feeds are valid!"
+        echo "All XML files are well-formed!"
+        
+    - name: Validate RSS 2.0 compliance
+      run: |
+        echo "Validating RSS 2.0 compliance..."
+        python validate_rss.py public

@@ -19,3 +19,8 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
+
+# Python virtual environment
+.venv/
+__pycache__/
+*.pyc
