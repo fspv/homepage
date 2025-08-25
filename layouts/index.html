@@ -1,0 +1,20 @@
+{{ define "main" }}
+{{ .Content }}
+
+<h2>Recent Posts</h2>
+<ul class="post-list">
+    {{ range first 5 (where .Site.RegularPages "Type" "posts") }}
+    <li>
+        <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+        <div class="post-meta">
+            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+        </div>
+        <p>{{ .Summary }}</p>
+    </li>
+    {{ end }}
+</ul>
+
+{{ if gt (len (where .Site.RegularPages "Type" "posts")) 5 }}
+<p><a href="/posts/">View all posts →</a></p>
+{{ end }}
+{{ end }}

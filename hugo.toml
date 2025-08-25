@@ -1,0 +1,24 @@
+baseURL = 'https://example.com/'
+languageCode = 'en-us'
+title = 'Pavel Safronov - Software Engineer'
+
+[params]
+  description = "Personal website of Pavel Safronov, Software Engineer"
+  author = "Pavel Safronov"
+
+[outputs]
+  home = ["HTML", "RSS"]
+  section = ["HTML", "RSS"]
+
+[permalinks]
+  posts = "/:year/:month/:slug/"
+
+[menu]
+  [[menu.main]]
+    name = "Home"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    name = "Blog"
+    url = "/posts/"
+    weight = 2
