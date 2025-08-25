@@ -134,3 +134,40 @@ jobs:
           python validate_rss.py "$SITE_URL/posts/index.xml"
           
           echo "Post-deployment RSS validation completed!"
+          
+  validate-links:
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - name: Install Nix
+        uses: nixbuild/nix-quick-install-action@v28
+          
+      - name: Wait for deployment to propagate
+        run: sleep 30
+        
+      - name: Check all links with muffet
+        run: |
+          echo "Starting comprehensive link check..."
+          
+          # Get the base URL from the repository name
+          REPO_NAME="${GITHUB_REPOSITORY#*/}"
+          SITE_URL="https://${GITHUB_REPOSITORY_OWNER}.github.io/${REPO_NAME}"
+          
+          echo "Crawling site: $SITE_URL"
+          
+          # Run muffet with reasonable settings:
+          # --buffer-size=8192: Handle large pages
+          # --max-connections=10: Limit concurrent connections
+          # --timeout=30: 30 second timeout per request
+          # --ignore-fragments: Skip fragment identifiers (anchors)
+          # --exclude: Skip LinkedIn and NixOS wiki
+          nix-shell -p muffet --run "muffet \
+            --buffer-size=8192 \
+            --max-connections=10 \
+            --timeout=30 \
+            --ignore-fragments \
+            --exclude='.*linkedin\.com.*' \
+            --exclude='.*nixos\.wiki.*' \
+            $SITE_URL"
+            
+          echo "Link check completed successfully!"
