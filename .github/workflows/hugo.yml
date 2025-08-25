@@ -139,8 +139,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: deploy
     steps:
-      - name: Install Nix
-        uses: nixbuild/nix-quick-install-action@v28
+      - name: Install muffet
+        run: |
+          wget -O muffet.tar.gz https://github.com/raviqqe/muffet/releases/latest/download/muffet_linux_amd64.tar.gz
+          tar -xzf muffet.tar.gz
+          sudo mv muffet /usr/local/bin/
           
       - name: Wait for deployment to propagate
         run: sleep 30
@@ -161,13 +164,13 @@ jobs:
           # --timeout=30: 30 second timeout per request
           # --ignore-fragments: Skip fragment identifiers (anchors)
           # --exclude: Skip LinkedIn and NixOS wiki
-          nix-shell -p muffet --run "muffet \
+          muffet \
             --buffer-size=8192 \
             --max-connections=10 \
             --timeout=30 \
             --ignore-fragments \
             --exclude='.*linkedin\.com.*' \
             --exclude='.*nixos\.wiki.*' \
-            $SITE_URL"
+            "$SITE_URL"
             
           echo "Link check completed successfully!"
