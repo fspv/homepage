@@ -22,7 +22,7 @@ So having said all of that, I needed somehow to get the latest sway in my rotten
 
 I run all my environments in a [nix-shell](https://nixos.wiki/wiki/Development_environment_with_nix-shell), which allows me to have almost zero dependencies on the host system. So basically I need Ubuntu just to boot up the Linux kernel and start systemd - everything else is handled by nix. 99% of things "just work" this way. But desktop environments are unfortunately not one of them:
 
-```
+```txt
 $ nix-shell -p sway --run sway
 00:00:00.002 [wlr] [render/egl.c:208] EGL_EXT_platform_base not supported
 00:00:00.002 [wlr] [render/egl.c:523] Failed to create EGL context
@@ -47,7 +47,7 @@ So basically, I rely on the flatpak build system to compile all the required bin
 
 Here is how the dependencies look for sway:
 
-```
+```txt
 sway
 ├── json-c
 └── wlroots
@@ -119,7 +119,7 @@ Some of the env variables may vary in different setups, but the idea will stay t
 
 The last remaining part I have is this
 
-```
+```txt
 $ cat /usr/local/bin/wayland-user
 #!/bin/sh
 ${XDG_DATA_HOME:="${HOME}/.local/share"}/bin/wayland-user
