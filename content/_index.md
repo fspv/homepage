@@ -3,6 +3,7 @@ title: "Pavel Safronov"
 ---
 
 # Pavel Safronov
+
 ## Software Engineer
 
 I'm a software engineer with more than decade of experience. I've started when there were no cloud services and mongodb was a new cutting-edge technology.
