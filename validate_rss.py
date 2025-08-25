@@ -8,6 +8,7 @@ It can be run manually or as part of a CI/CD pipeline.
 Usage:
     python validate_rss.py <rss_file>
     python validate_rss.py <directory>  # Validates all RSS/XML files in directory
+    python validate_rss.py <url>       # Validates RSS feed from URL
 """
 
 import sys
@@ -15,18 +16,33 @@ import os
 import glob
 import feedparser
 from urllib.parse import urlparse
+import urllib.request
+import urllib.error
 
 
-def validate_rss(file_path):
-    """Validate a single RSS feed file for RSS 2.0 compliance."""
-    print(f"\nValidating RSS 2.0 compliance for: {file_path}")
+def validate_rss(source):
+    """Validate a single RSS feed from file or URL for RSS 2.0 compliance."""
+    print(f"\nValidating RSS 2.0 compliance for: {source}")
     
-    try:
-        with open(file_path, 'r', encoding='utf-8') as f:
-            content = f.read()
-    except Exception as e:
-        print(f"  ERROR: Cannot read file - {e}")
-        return False
+    # Check if source is a URL
+    if source.startswith(('http://', 'https://')):
+        try:
+            with urllib.request.urlopen(source) as response:
+                content = response.read().decode('utf-8')
+        except urllib.error.URLError as e:
+            print(f"  ERROR: Cannot fetch URL - {e}")
+            return False
+        except Exception as e:
+            print(f"  ERROR: Failed to read from URL - {e}")
+            return False
+    else:
+        # It's a file path
+        try:
+            with open(source, 'r', encoding='utf-8') as f:
+                content = f.read()
+        except Exception as e:
+            print(f"  ERROR: Cannot read file - {e}")
+            return False
     
     # Parse the feed
     feed = feedparser.parse(content)
@@ -100,7 +116,11 @@ def validate_rss(file_path):
 
 
 def find_rss_files(path):
-    """Find RSS/XML files in a directory."""
+    """Find RSS/XML files in a directory or return URL if it's a URL."""
+    # Check if it's a URL
+    if path.startswith(('http://', 'https://')):
+        return [path]
+    
     rss_files = []
     
     if os.path.isfile(path):
@@ -122,12 +142,35 @@ def main():
     
     path = sys.argv[1]
     
-    # Find RSS files
-    rss_files = find_rss_files(path)
-    
-    if not rss_files:
-        print(f"No RSS files found in: {path}")
-        sys.exit(1)
+    # Special handling for common RSS URLs
+    if path.startswith(('http://', 'https://')):
+        # If it's a base URL without specific RSS file, try common RSS paths
+        if not path.endswith(('.xml', '.rss', '.atom')):
+            base_url = path.rstrip('/')
+            common_rss_paths = ['/index.xml', '/feed.xml', '/rss.xml', '/atom.xml']
+            rss_files = []
+            
+            for rss_path in common_rss_paths:
+                test_url = base_url + rss_path
+                try:
+                    with urllib.request.urlopen(test_url) as response:
+                        if response.status == 200:
+                            rss_files.append(test_url)
+                except:
+                    pass
+            
+            if not rss_files:
+                print(f"No RSS feeds found at common paths for: {path}")
+                sys.exit(1)
+        else:
+            rss_files = [path]
+    else:
+        # Find RSS files in directory or file
+        rss_files = find_rss_files(path)
+        
+        if not rss_files:
+            print(f"No RSS files found in: {path}")
+            sys.exit(1)
     
     print(f"Found {len(rss_files)} RSS file(s) to validate")
     

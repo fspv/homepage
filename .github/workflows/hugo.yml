@@ -68,3 +68,39 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        
+  validate-deployed-rss:
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+          
+      - name: Install feedparser
+        run: pip install feedparser
+        
+      - name: Wait for deployment to propagate
+        run: sleep 30
+        
+      - name: Validate deployed RSS feeds
+        run: |
+          echo "Validating RSS feeds from deployed site..."
+          
+          # Get the base URL from the repository name
+          REPO_NAME="${GITHUB_REPOSITORY#*/}"
+          SITE_URL="https://${GITHUB_REPOSITORY_OWNER}.github.io/${REPO_NAME}"
+          
+          echo "Site URL: $SITE_URL"
+          
+          # Validate the main RSS feed
+          python validate_rss.py "$SITE_URL/index.xml"
+          
+          # Also validate posts RSS feed
+          python validate_rss.py "$SITE_URL/posts/index.xml"
+          
+          echo "Post-deployment RSS validation completed!"
