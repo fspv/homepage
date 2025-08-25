@@ -1,6 +1,6 @@
 ---
 title: "Understanding Microservices Architecture"
-date: 2025-08-25T10:00:00-07:00
+date: 2025-01-24T10:00:00-07:00
 draft: false
 slug: "understanding-microservices-architecture"
 tags: ["microservices", "architecture", "backend"]

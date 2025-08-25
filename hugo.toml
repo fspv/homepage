@@ -1,4 +1,5 @@
-baseURL = 'https://example.com/'
+baseURL = '/'
+relativeURLs = true
 languageCode = 'en-us'
 title = 'Pavel Safronov - Software Engineer'
 
