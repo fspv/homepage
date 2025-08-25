@@ -7,6 +7,15 @@ title = 'Pavel Safronov - Software Engineer'
   description = "Personal website of Pavel Safronov, Software Engineer"
   author = "Pavel Safronov"
 
+# RSS Configuration
+rssLimit = 10
+enableRobotsTXT = true
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
 [outputs]
   home = ["HTML", "RSS"]
   section = ["HTML", "RSS"]
