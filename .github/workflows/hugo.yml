@@ -169,6 +169,7 @@ jobs:
             --max-connections=10 \
             --timeout=30 \
             --ignore-fragments \
+            --verbose \
             --exclude='.*linkedin\.com.*' \
             --exclude='.*nixos\.wiki.*' \
             "$SITE_URL"
