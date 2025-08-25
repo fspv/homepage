@@ -1,5 +1,4 @@
-baseURL = '/'
-relativeURLs = true
+baseURL = 'https://fspv.github.io/homepage/'
 languageCode = 'en-us'
 title = 'Pavel Safronov - Software Engineer'
 

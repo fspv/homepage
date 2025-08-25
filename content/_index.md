@@ -10,7 +10,7 @@ I'm a software engineer with more than decade of experience. I've started when t
 
 I'm passionate about infrastructure and AI and put most of my effort in these two areas. However, for the last few years I was working as a product developer to close some gaps I had in this area. Long-term I'm looking to work on ML infrastructure.
 
-Feel free to check out my [blog posts](/posts/) where I try to share my insights in areas where I developed deep technical expertise.
+Feel free to check out my [blog posts]({{< ref "/posts" >}}) where I try to share my insights in areas where I developed deep technical expertise.
 
 ---
 

@@ -6,7 +6,7 @@
     <meta name="color-scheme" content="dark">
     <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} - {{ .Site.Title }}{{ end }}</title>
     <meta name="description" content="{{ if .IsHome }}{{ .Site.Params.description }}{{ else }}{{ .Summary }}{{ end }}">
-    <link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" href="/index.xml">
+    <link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" href="{{ "index.xml" | absURL }}">
     <style>
         :root {
             /* Dark mode colors */
@@ -140,7 +140,7 @@
             {{ range .Site.Menus.main }}
             <li><a href="{{ .URL }}">{{ .Name }}</a></li>
             {{ end }}
-            <li><a href="/index.xml">RSS</a></li>
+            <li><a href="{{ "index.xml" | absURL }}">RSS</a></li>
         </ul>
     </nav>
     
@@ -158,8 +158,10 @@
             const links = document.querySelectorAll('a[href]');
             links.forEach(function(link) {
                 const href = link.getAttribute('href');
-                // Check if it's an external link (starts with http/https or is an email)
-                if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:')) {
+                // Check if it's an external link (starts with http/https but not our domain, or is an email)
+                if (href.startsWith('mailto:') || 
+                    ((href.startsWith('http://') || href.startsWith('https://')) && 
+                     !href.startsWith(window.location.origin))) {
                     link.setAttribute('target', '_blank');
                     link.setAttribute('rel', 'noopener noreferrer');
                 }

@@ -15,6 +15,6 @@
 </ul>
 
 {{ if gt (len (where .Site.RegularPages "Type" "posts")) 5 }}
-<p><a href="/posts/">View all posts →</a></p>
+<p><a href="{{ "posts/" | absURL }}">View all posts →</a></p>
 {{ end }}
 {{ end }}
