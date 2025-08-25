@@ -134,7 +134,7 @@ Type=Application
 
 This will create a menu entry in your login manager (I use gdm3):
 
-![GDM login screen showing wayland-user session option](gdm.png)
+![GDM login screen showing wayland-user session option](/2025/01/sway-flatpak-build/gdm.png)
 
 So now you can just log out, and log in again with the latest sway running in your old system.
 
