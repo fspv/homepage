@@ -1,0 +1,13 @@
+{{- $src := .Destination -}}
+{{- $alt := .Text -}}
+{{- $title := .Title -}}
+
+{{- if not (strings.HasPrefix $src "http") -}}
+  {{- if strings.HasPrefix $src "/" -}}
+    {{- $src = (printf "%s%s" .Page.Site.BaseURL (strings.TrimPrefix "/" $src)) -}}
+  {{- else -}}
+    {{- $src = (printf "%s%s" .Page.Permalink $src) -}}
+  {{- end -}}
+{{- end -}}
+
+<img src="{{ $src }}" alt="{{ $alt }}"{{ with $title }} title="{{ . }}"{{ end }}>
