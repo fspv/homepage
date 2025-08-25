@@ -10,10 +10,10 @@
     {{ .Content }}
     
     {{ if .Params.tags }}
-    <div class="post-meta" style="margin-top: 30px;">
+    <div class="post-meta post-tags">
         Tags: 
         {{ range .Params.tags }}
-        <span style="background: #f0f0f0; padding: 2px 8px; border-radius: 3px; margin-right: 5px;">{{ . }}</span>
+        <span class="tag">{{ . }}</span>
         {{ end }}
     </div>
     {{ end }}

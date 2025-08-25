@@ -3,22 +3,39 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
     <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} - {{ .Site.Title }}{{ end }}</title>
     <meta name="description" content="{{ if .IsHome }}{{ .Site.Params.description }}{{ else }}{{ .Summary }}{{ end }}">
     <link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" href="/index.xml">
     <style>
+        :root {
+            /* Dark mode colors */
+            --bg-color: #1a1a1a;
+            --text-color: #e0e0e0;
+            --heading-color: #ffffff;
+            --link-color: #4d9fff;
+            --border-color: #333333;
+            --muted-color: #b0b0b0;
+            --code-bg: #2d2d2d;
+            --pre-bg: #242424;
+            --pre-border: #404040;
+            --shadow-color: rgba(0,0,0,0.3);
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             line-height: 1.6;
-            color: #333;
+            color: var(--text-color);
+            background-color: var(--bg-color);
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
         nav {
             margin-bottom: 30px;
             padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--border-color);
         }
         nav ul {
             list-style: none;
@@ -31,31 +48,36 @@
         }
         nav a {
             text-decoration: none;
-            color: #0066cc;
+            color: var(--link-color);
+            transition: color 0.3s ease;
         }
         nav a:hover {
             text-decoration: underline;
         }
         h1, h2, h3 {
-            color: #222;
+            color: var(--heading-color);
+            transition: color 0.3s ease;
         }
         a {
-            color: #0066cc;
+            color: var(--link-color);
+            transition: color 0.3s ease;
         }
         code {
-            background: #f4f4f4;
+            background: var(--code-bg);
             padding: 2px 4px;
             border-radius: 3px;
             font-family: 'Monaco', 'Consolas', 'Ubuntu Mono', monospace;
             font-size: 0.9em;
+            transition: background-color 0.3s ease;
         }
         pre {
-            background: #f8f8f8;
-            border: 1px solid #e0e0e0;
+            background: var(--pre-bg);
+            border: 1px solid var(--pre-border);
             border-radius: 5px;
             padding: 15px;
             overflow-x: auto;
             margin: 20px 0;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
         pre code {
             background: none;
@@ -69,18 +91,21 @@
             display: block;
             margin: 20px auto;
             border-radius: 5px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px var(--shadow-color);
+            transition: box-shadow 0.3s ease;
         }
         footer {
             margin-top: 50px;
             padding-top: 20px;
-            border-top: 1px solid #eee;
+            border-top: 1px solid var(--border-color);
             text-align: center;
-            color: #666;
+            color: var(--muted-color);
+            transition: border-color 0.3s ease, color 0.3s ease;
         }
         .post-meta {
-            color: #666;
+            color: var(--muted-color);
             font-size: 0.9em;
+            transition: color 0.3s ease;
         }
         .post-list {
             list-style: none;
@@ -88,6 +113,24 @@
         }
         .post-list li {
             margin-bottom: 20px;
+        }
+        .post-tags {
+            margin-top: 30px;
+        }
+        .tag {
+            background: var(--code-bg);
+            color: var(--text-color);
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-right: 6px;
+            font-size: 0.85em;
+            display: inline-block;
+            margin-bottom: 4px;
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .tag:hover {
+            background: var(--border-color);
         }
     </style>
 </head>
@@ -108,5 +151,20 @@
     <footer>
         <p>&copy; {{ now.Year }} {{ .Site.Params.author }}. All rights reserved.</p>
     </footer>
+    
+    <script>
+        // Make all external links open in new window
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('a[href]');
+            links.forEach(function(link) {
+                const href = link.getAttribute('href');
+                // Check if it's an external link (starts with http/https or is an email)
+                if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:')) {
+                    link.setAttribute('target', '_blank');
+                    link.setAttribute('rel', 'noopener noreferrer');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
