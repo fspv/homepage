@@ -1,0 +1,41 @@
+name: Validate RSS Feeds
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  validate-rss:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Hugo
+      uses: peaceiris/actions-hugo@v3
+      with:
+        hugo-version: 'latest'
+        extended: true
+        
+    - name: Build site
+      run: hugo
+      
+    - name: Install xmllint
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libxml2-utils
+        
+    - name: Validate RSS feeds
+      run: |
+        echo "Validating RSS feeds..."
+        
+        # Find all XML files in public directory
+        find public -name "*.xml" -type f | while read -r xml_file; do
+          echo "Checking: $xml_file"
+          xmllint --noout "$xml_file" || exit 1
+        done
+        
+        echo "All RSS feeds are valid!"
