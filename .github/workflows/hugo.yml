@@ -87,6 +87,36 @@ jobs:
       - name: Wait for deployment to propagate
         run: sleep 30
         
+      - name: Check page accessibility
+        run: |
+          echo "Checking page accessibility..."
+          
+          # Get the base URL from the repository name
+          REPO_NAME="${GITHUB_REPOSITORY#*/}"
+          SITE_URL="https://${GITHUB_REPOSITORY_OWNER}.github.io/${REPO_NAME}"
+          
+          echo "Site URL: $SITE_URL"
+          
+          # Check main page
+          echo "Checking main page..."
+          if curl -f -s -o /dev/null "$SITE_URL/"; then
+            echo "✓ Main page (/) returns 200"
+          else
+            echo "✗ Main page (/) failed"
+            exit 1
+          fi
+          
+          # Check posts page
+          echo "Checking posts page..."
+          if curl -f -s -o /dev/null "$SITE_URL/posts/"; then
+            echo "✓ Posts page (/posts/) returns 200"
+          else
+            echo "✗ Posts page (/posts/) failed"
+            exit 1
+          fi
+          
+          echo "All pages are accessible!"
+          
       - name: Validate deployed RSS feeds
         run: |
           echo "Validating RSS feeds from deployed site..."
