@@ -146,7 +146,7 @@ I also tried to build an AppImage, but for some reason this failed (I don't reme
 
 I used this method across two Ubuntu releases: 22.04 and 24.04 (now). Both times it solved some critical problems for me.
 
-- In 22.04, the wayland version was not supporting `ext-session-lock-v1`, which resulted in a huge security issue where you can see the screen of the locked desktop when the machine wakes up from sleep. Also, touchpad gestures were not supported.
+- In 22.04, the wayland version was not supporting [ext-session-lock-v1](https://gitlab.freedesktop.org/wayland/wayland-protocols/-/commit/2e1e07e34c1fc067ec5e5d5111a7cfc99420e189), which resulted in a huge security issue where you can see the screen of the locked desktop when the machine wakes up from sleep. Also, touchpad gestures were not supported.
 - In 24.04, there were scaling issues where window DPI was set incorrectly after the second monitor is connected.
 
 Both times after upgrading to the latest version everything worked like a charm.
