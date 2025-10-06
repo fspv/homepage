@@ -70,7 +70,7 @@ Armed with experience from my failed attempts, I started fresh with a proper des
 
 ### The Design Phase
 
-I used two AI models for the design: Gemini 2.5 Pro and Claude Opus 4. I had them extract all my requirements through questioning, validate there were no logical or functional gaps, and cross-validate each other's work. The result was a detailed backend service design (available at https://github.com/fspv/chef-de-vibe/blob/master/src/README.md).
+I used two AI models for the design: Gemini 2.5 Pro and Claude Opus 4. I had them extract all my requirements through questioning, validate there were no logical or functional gaps, and cross-validate each other's work. The result was a detailed backend service design (available at https://github.com/fspv/chef-de-vibe/blob/master/src/README.md ).
 
 I kept the frontend design minimal - the hard part there would be visual representation, which I'd tackle later.
 
