@@ -1,6 +1,6 @@
 ---
 title: "Chef de Vibe - Remote Claude Code UI"
-date: 2025-10-06T14:00:00-07:00
+date: 2025-10-06T10:00:00-07:00
 draft: false
 slug: "chef-de-vibe-remote-claude-code-ui"
 tags:
