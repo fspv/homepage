@@ -248,7 +248,7 @@ Worth mentioning that there are so many articles describing mystical ways to tra
 - Just try all the combinations and find the optimal one
 - Knowing the optimal result, try all the combinations again and pick the one that fits it
 
-PS: if you are looking for a complete solution, it is available [here](https://archive.is/o/k51qr/https://gist.github.com/prius/3cf69e39b2c1b8320280c1f84271276b)
+PS: if you are looking for a complete solution, it is available [here](https://gist.github.com/fspv/3cf69e39b2c1b8320280c1f84271276b)
 
 ## Now you know
 

@@ -21,8 +21,29 @@ defaults:
     shell: bash
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          
+      - name: Install Prettier
+        run: npm install -g prettier
+        
+      - name: Check markdown formatting
+        run: |
+          echo "Checking markdown formatting..."
+          find . -name '*.md' -not -path './.git/*' -print0 | \
+          xargs -0 prettier --parser=markdown --check
+          
   build:
     runs-on: ubuntu-latest
+    needs: lint
     env:
       HUGO_VERSION: 0.123.7
     steps:
@@ -31,13 +52,20 @@ jobs:
           wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb \
           && sudo dpkg -i ${{ runner.temp }}/hugo.deb          
       - name: Install Dart Sass
-        run: sudo snap install dart-sass
+        run: |
+          DART_SASS_VERSION=1.93.2
+          curl -fsSL -o dart-sass.tar.gz https://github.com/sass/dart-sass/releases/download/${DART_SASS_VERSION}/dart-sass-${DART_SASS_VERSION}-linux-x64.tar.gz
+          tar -xzf dart-sass.tar.gz
+          sudo mv dart-sass/sass /usr/local/bin/
+          sudo chmod +x /usr/local/bin/sass
+          rm -rf dart-sass dart-sass.tar.gz
       - name: Checkout
         uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 0
       - name: Setup Pages
+        if: ${{ !env.ACT }}
         id: pages
         uses: actions/configure-pages@v4
         with:
@@ -49,27 +77,108 @@ jobs:
           HUGO_ENVIRONMENT: production
           HUGO_ENV: production
         run: |
+          if [ -n "$ACT" ]; then
+            # Generate random port for local testing
+            PORT=$((30000 + RANDOM % 10001))
+            BASE_URL="http://localhost:$PORT"
+          else
+            BASE_URL="${{ steps.pages.outputs.base_url }}/"
+          fi
           hugo \
             --gc \
             --minify \
-            --baseURL "${{ steps.pages.outputs.base_url }}/"          
+            --baseURL "$BASE_URL"          
       - name: Upload artifact
+        if: ${{ !env.ACT }}
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./public
 
+  validate-pre-deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+          
+      - name: Install dependencies
+        run: |
+          pip install feedparser
+          
+      - name: Install Hugo for local server
+        run: |
+          HUGO_VERSION=0.123.7
+          wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb \
+          && sudo dpkg -i ${{ runner.temp }}/hugo.deb
+          
+      - name: Install muffet
+        run: |
+          wget -O muffet.tar.gz https://github.com/raviqqe/muffet/releases/latest/download/muffet_linux_amd64.tar.gz
+          tar -xzf muffet.tar.gz
+          sudo mv muffet /usr/local/bin/
+          
+      - name: Start Hugo server and validate
+        run: |
+          # Generate random port between 30000-40000
+          PORT=$((30000 + RANDOM % 10001))
+          echo "Using port: $PORT"
+          
+          # Start Hugo server in background
+          hugo server --source . --destination ./public --baseURL http://localhost:$PORT --port $PORT &
+          HUGO_PID=$!
+          
+          # Wait for server to be ready
+          echo "Waiting for Hugo server to start..."
+          for i in {1..30}; do
+            if curl -s -o /dev/null "http://localhost:$PORT"; then
+              echo "Hugo server is ready!"
+              break
+            fi
+            sleep 1
+          done
+          
+          # Validate RSS feeds
+          echo "Validating RSS feeds from local build..."
+          python validate_rss.py "http://localhost:$PORT/index.xml"
+          python validate_rss.py "http://localhost:$PORT/posts/index.xml"
+          
+          # Validate links
+          echo "Validating links on local build..."
+          muffet \
+            --buffer-size=8192 \
+            --max-connections=10 \
+            --timeout=30 \
+            --ignore-fragments \
+            --verbose \
+            --exclude='.*linkedin\.com.*' \
+            --exclude='.*leetcode\.com.*' \
+            --exclude='.*medium\.com.*' \
+            --exclude='.*wikipedia\.org.*' \
+            --exclude='.*nixos\.wiki.*' \
+            http://localhost:$PORT
+          
+          # Kill Hugo server
+          kill $HUGO_PID
+            
   deploy:
+    if: ${{ !github.event.act }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build, validate-pre-deploy]
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
         
   validate-deployed-rss:
+    if: ${{ !github.event.act }}
     runs-on: ubuntu-latest
     needs: deploy
     steps:
@@ -136,6 +245,7 @@ jobs:
           echo "Post-deployment RSS validation completed!"
           
   validate-links:
+    if: ${{ !github.event.act }}
     runs-on: ubuntu-latest
     needs: deploy
     steps:
@@ -171,6 +281,9 @@ jobs:
             --ignore-fragments \
             --verbose \
             --exclude='.*linkedin\.com.*' \
+            --exclude='.*leetcode\.com.*' \
+            --exclude='.*medium\.com.*' \
+            --exclude='.*wikipedia\.org.*' \
             --exclude='.*nixos\.wiki.*' \
             "$SITE_URL"
             
