@@ -3,7 +3,14 @@ title: "Dynamic Programming is Simple"
 date: 2021-09-27T10:00:00-07:00
 draft: false
 slug: "dynamic-programming-is-simple"
-tags: ["algorithms", "programming", "dynamic-programming", "leetcode", "coding-interview"]
+tags:
+  [
+    "algorithms",
+    "programming",
+    "dynamic-programming",
+    "leetcode",
+    "coding-interview",
+  ]
 summary: "Learn how to solve 90% of DP problems using a simple pattern. This article explains the approach through the Best Time to Buy and Sell Stock problem."
 ---
 

@@ -3,7 +3,14 @@ title: "Dynamic programming is simple #3 (multi-root recursion)"
 date: 2021-10-18T10:00:00-07:00
 draft: false
 slug: "dynamic-programming-is-simple-3"
-tags: ["algorithms", "programming", "dynamic-programming", "leetcode", "coding-interview"]
+tags:
+  [
+    "algorithms",
+    "programming",
+    "dynamic-programming",
+    "leetcode",
+    "coding-interview",
+  ]
 summary: "Learn how to handle DP problems with multi-root recursion through the Longest Increasing Subsequence problem."
 ---
 

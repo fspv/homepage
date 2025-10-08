@@ -3,7 +3,14 @@ title: "Dynamic programming is simple #4 (bitmap + optimal solution reconstructi
 date: 2022-03-25T10:00:00-07:00
 draft: false
 slug: "dynamic-programming-is-simple-4"
-tags: ["algorithms", "programming", "dynamic-programming", "leetcode", "coding-interview"]
+tags:
+  [
+    "algorithms",
+    "programming",
+    "dynamic-programming",
+    "leetcode",
+    "coding-interview",
+  ]
 summary: "Learn how to handle DP problems with bitmap states and reconstruct optimal solutions. Covers cases when recursion arguments can't be naturally cached."
 ---
 

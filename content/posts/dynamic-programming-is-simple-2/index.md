@@ -3,7 +3,14 @@ title: "Dynamic programming is simple #2"
 date: 2021-10-07T10:00:00-07:00
 draft: false
 slug: "dynamic-programming-is-simple-2"
-tags: ["algorithms", "programming", "dynamic-programming", "leetcode", "coding-interview"]
+tags:
+  [
+    "algorithms",
+    "programming",
+    "dynamic-programming",
+    "leetcode",
+    "coding-interview",
+  ]
 summary: "Continue learning the DP pattern through the Edit Distance problem. This article builds on the template from the first article with a more complex example."
 ---
 
