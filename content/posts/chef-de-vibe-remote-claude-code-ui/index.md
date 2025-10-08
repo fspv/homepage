@@ -14,9 +14,10 @@ tags:
     "vibe-coding",
     "UI",
   ]
+summary: "Building a mobile coding interface for Claude Code in two weeks without writing code. How AI-assisted development helped capture those brilliant coding ideas that strike at the worst times."
 ---
 
-# How I Built a Mobile Coding Interface in Two Weeks Without Writing a Single Line of Code
+How I Built a Mobile Coding Interface in Two Weeks Without Writing a Single Line of Code
 
 ## The Eureka Moment
 

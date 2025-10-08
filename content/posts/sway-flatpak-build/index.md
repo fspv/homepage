@@ -4,6 +4,7 @@ date: 2025-01-25T14:00:00-07:00
 draft: false
 slug: "sway-flatpak-build"
 tags: ["sway", "flatpak", "wayland", "linux", "containerization"]
+summary: "Running the latest Sway window manager on Ubuntu LTS using Flatpak's build system. A solution for getting cutting-edge desktop environments on stable distributions without breaking system dependencies."
 ---
 
 This post explains how I run the latest Sway window manager on Ubuntu LTS using Flatpak's build system.

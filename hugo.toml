@@ -15,7 +15,13 @@ enableRobotsTXT = true
     [markup.goldmark.renderer]
       unsafe = true
   [markup.highlight]
-    noClasses = false
+    codeFences = true
+    guessSyntax = false
+    lineNos = false
+    lineNumbersInTable = true
+    noClasses = true
+    style = "monokai"
+    tabWidth = 4
 
 [outputs]
   home = ["HTML", "RSS"]
